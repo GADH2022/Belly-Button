@@ -1,24 +1,28 @@
 var arrColorsG=["#5899DA", "#E8743B", "#19A979", 
                 "#ED4A7B", "#945ECF", "#13A4B4",
                  "#525DF4", "#BF399E", "#6C8893", 
-                 "white"];
+               "white"];
 
+  
+  // getting data  
  function buildMetadata(sample)
  {
     d3.json("samples.json").then((data)=>{
-      // console.log(data);
+       // console.log(data);
         var metadata = data.metadata;
         var resultsarray = metadata.filter(sampleobject=>
-                sampleobject.id===sample);
+                sampleobject.id=sample);
+      //  console.log(resultsarray);        
         var result=resultsarray[0];
+      //  console.log(result);
         var demographicInfo=d3.select("#sample-metadata");
-        
+        //using '.html("")' to clear any existing metadata
         demographicInfo.html(""); 
-       const para=document.createElement("p");
+       //const para=document.createElement("p");
         //use d3 to select panel with id of sample-metadata
         //using Object.entries to add each key and value pair to panel
         Object.entries(result).forEach(([key,value])=>{
-            demographicInfo.append("p").text(`${key.toUpperCase()}:${value}`);
+            demographicInfo.append("h3").text(`${key}:${value}`);
         //document.getElementById("sample-metadata").appendChild(para);
         });
 
@@ -68,6 +72,7 @@ function CreateGauge(num) {
   };
   Plotly.newPlot('gauge',gaugedata,layout);
 }
+//Building Charts
 
 function buildCharts(sample) {
 
@@ -102,7 +107,8 @@ function buildCharts(sample) {
         }
       ];
       Plotly.newPlot("bubble", DataBubble, LayoutBubble);
-      // for bar charts 
+
+      //------ for bar charts 
 
       var bar_data =[
         {
@@ -124,25 +130,22 @@ function buildCharts(sample) {
     });
     }
 
-       
-    
     //============= Function init =======================//
     
-    function init() {
-    // Grab a reference to the dropdown select element
-    var selector = d3.select("#selDataset");
-    
-    // Use the list of sample names to populate the select options
-    d3.json("samples.json").then((data) => {
-      // console.log(data)
-      var sampleNames = data.names;
-      sampleNames.forEach((sample) => {
-        selector
-          .append("option")
-          .text(sample)
-          .property("value", sample);
-      });
-    
+function init() {
+  // Grab a reference to the dropdown select element
+  var selector = d3.select("#selDataset");
+  
+  // Use the list of sample names to populate the select options
+  d3.json("samples.json").then((data) => {
+    // console.log(data)
+    var sampleNames = data.names;
+    sampleNames.forEach((sample) => {
+      selector
+        .append("option")
+        .text(sample)
+        .property("value", sample);
+    });
       // Use the first sample from the list to build the initial plots
       const firstSample = sampleNames[0];
       buildMetadata(firstSample);
@@ -164,7 +167,15 @@ function buildCharts(sample) {
     
     
     // Initialize the dashboard
-    init();
+   init();
+  
+  
+
+       
+    
+   
+    
+    
 
    
 
